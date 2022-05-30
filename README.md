@@ -123,6 +123,7 @@ Set `POSTGRES_HOST` to `localhost` for `.env.development` and `localhost` for `.
 ## What to do when add new ENV VARIABLES
 
 There are several things you need to do when you add new ENV VARIABLES:
+
 - Add them to `.env.example` file
 - Add them to your local `.env.development` and `.env.test` files
 - Add them to your docker-compose.yml file (just the name, not the value). Only envs listed in the environment section will be exposed to your docker container.
