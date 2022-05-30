@@ -1,6 +1,4 @@
 import { notFoundError } from '@/errors';
-import enrollmentRepository from '@/repositories/enrollment-repository';
-import eventRepository from '@/repositories/event-repository';
 import ticketRepository from '@/repositories/ticket-repository';
 import { exclude } from '@/utils/prisma-utils';
 import { Ticket } from '@prisma/client';
