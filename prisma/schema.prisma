@@ -49,6 +49,7 @@ model Enrollment {
   userId    Int       @unique
   User      User      @relation(fields: [userId], references: [id])
   Address   Address[]
+  Ticket    Ticket?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -66,4 +67,18 @@ model Address {
   Enrollment    Enrollment @relation(fields: [enrollmentId], references: [id])
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
+}
+
+enum TicketType {
+  online
+  presencial
+}
+
+model Ticket {
+  id           Int        @id @default(autoincrement())
+  type         TicketType
+  hotel        Boolean    @default(false)
+  totalValue   Int
+  enrollmentId Int        @unique
+  Enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
 }
