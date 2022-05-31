@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import app, { init } from '@/app';
 import { prisma } from '@/config';
 import { duplicatedEmailError } from '@/services/users-service';
