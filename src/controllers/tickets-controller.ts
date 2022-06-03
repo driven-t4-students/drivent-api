@@ -11,7 +11,7 @@ export async function getTicketByUser(req: AuthenticatedRequest, res: Response) 
 }
 
 export async function createBooking(req: Request, res: Response) {
-  console.log(req.body);
+  await ticketsService.createBookingTickets(req.body);
 
   res.sendStatus(201);
 }

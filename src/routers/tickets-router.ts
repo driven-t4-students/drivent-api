@@ -4,6 +4,6 @@ import { createBooking, getTicketByUser } from '@/controllers/tickets-controller
 
 const ticketsRouter = Router();
 
-ticketsRouter.all('/*', authenticateToken).get('/', getTicketByUser).post('/reservTicket', createBooking);
+ticketsRouter.all('/*', authenticateToken).get('/', getTicketByUser).post('/', createBooking);
 
 export { ticketsRouter };
