@@ -28,8 +28,7 @@ async function createBookingTickets(formData: createTicket) {
   const enrollment = await enrollmentsService.getEnrollmentByUserId(userId);
   if (!enrollment) throw notFoundError();
   const enrollmentId = enrollment.id;
-  const ticket = await ticketsService.getByUserId(enrollmentId);
-  if (ticket) throw conflictError('Já existe Ticket para este usuário!');
+
   const data = { type, totalValue, hotel, enrollmentId };
 
   await ticketRepository.createTicket(data);
