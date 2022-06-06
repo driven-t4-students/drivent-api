@@ -1,4 +1,4 @@
-import { conflictError, notFoundError } from '@/errors';
+import { notFoundError } from '@/errors';
 import ticketRepository from '@/repositories/ticket-repository';
 import { exclude } from '@/utils/prisma-utils';
 import { Ticket, TicketType } from '@prisma/client';
