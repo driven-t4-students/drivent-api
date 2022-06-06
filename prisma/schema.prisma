@@ -71,7 +71,7 @@ model Address {
 
 enum TicketType {
   online
-  presencial
+  presential
 }
 
 model Ticket {

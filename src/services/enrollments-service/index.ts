@@ -48,9 +48,15 @@ export type CreateOrUpdateEnrollmentWithAddress = CreateEnrollmentParams & {
   address: CreateAddressParams;
 };
 
+function getEnrollmentByUserId(userId: number) {
+  const enrollmentId = enrollmentRepository.findWithAddressByUserId(userId);
+  return enrollmentId;
+}
+
 const enrollmentsService = {
   getOneWithAddressByUserId,
   createOrUpdateEnrollmentWithAddress,
+  getEnrollmentByUserId,
 };
 
 export default enrollmentsService;
