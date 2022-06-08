@@ -18,6 +18,8 @@ model User {
   updatedAt  DateTime     @updatedAt
   Session    Session[]
   Enrollment Enrollment[]
+
+  @@map("users")
 }
 
 model Session {
@@ -27,17 +29,8 @@ model Session {
   token     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
-model Event {
-  id                 Int      @id @default(autoincrement())
-  title              String   @db.VarChar(255)
-  backgroundImageUrl String   @db.VarChar(255)
-  logoImageUrl       String   @db.VarChar(255)
-  startsAt           DateTime
-  endsAt             DateTime
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  @@map("sessions")
 }
 
 model Enrollment {
@@ -52,6 +45,8 @@ model Enrollment {
   Ticket    Ticket?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  @@map("enrollments")
 }
 
 model Address {
@@ -67,6 +62,8 @@ model Address {
   Enrollment    Enrollment @relation(fields: [enrollmentId], references: [id])
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
+
+  @@map("addresses")
 }
 
 enum TicketType {
@@ -81,4 +78,12 @@ model Ticket {
   totalValue   Int
   enrollmentId Int        @unique
   Enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+
+  @@map("tickets")
+}
+
+model Hotel {
+  id Int @id @default(autoincrement())
+
+  @@map("hotels")
 }
