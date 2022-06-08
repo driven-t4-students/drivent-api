@@ -11,7 +11,7 @@
     "migration:run": "npm run dev:load-envs prisma migrate deploy",
     "migration:generate": "npm run dev:load-envs prisma migrate dev",
     "lint:staged": "lint-staged",
-    "test": "jest --passWithNoTests --runInBand",
+    "test": "jest  --passWithNoTests --runInBand",
     "test:migration:run": "npm run test:load-envs prisma migrate deploy",
     "test:migration:generate": "npm run test:load-envs prisma migrate dev",
     "test:watch": "jest --watch --passWithNoTests --runInBand",
@@ -32,7 +32,10 @@
     "dev:seed": "npm run dev:compose -- run drivent-development npm run dev:load-envs prisma db seed",
     "dev:docker": "npm run dev:compose -- up",
     "dev:docker:down": "npm run dev:compose -- down",
-    "dev": "NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
+    "dev": "fuser -k 4000/tcp ; NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
+    "redis": "docker-compose -f docker-compose-redis-only.yml up --remove-orphans",
+    "redis:seed": "npm run dev:load-envs -- ts-node redis/seed.ts",
+    "redis:down": "docker-compose -f docker-compose-redis-only.yml down --remove-orphans",
     "ci:build": "docker-compose -f docker-compose.test.yml build",
     "ci:test": "docker-compose -f docker-compose.test.yml run drivent-test bash -c 'npm run test:migration:run && npm test'"
   },
@@ -47,9 +50,6 @@
   ],
   "author": "Alexandre Nunes",
   "license": "ISC",
-  "prisma": {
-    "seed": "npm run dev:load-envs -- ts-node prisma/seed.ts"
-  },
   "devDependencies": {
     "@faker-js/faker": "^6.3.1",
     "@types/bcrypt": "^5.0.0",
@@ -73,7 +73,6 @@
     "lint-staged": "^12.4.1",
     "nodemon": "^2.0.16",
     "prettier": "^2.6.2",
-    "prisma": "^3.14.0",
     "supertest": "^6.2.3",
     "ts-jest": "^26.5.5",
     "ts-node": "^10.7.0",
@@ -95,6 +94,7 @@
     "http-status": "^1.5.2",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
+    "redis": "^4.1.0",
     "reflect-metadata": "^0.1.13"
   }
 }
