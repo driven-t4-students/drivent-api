@@ -104,9 +104,9 @@ model Room {
 }
 
 model Bed {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   roomId   Int
-  room     Room   @relation(fields: [roomId], references: [id])
-  ticketId Int    @unique
-  Ticket   Ticket @relation(fields: [ticketId], references: [id])
+  room     Room    @relation(fields: [roomId], references: [id])
+  ticketId Int?    @unique
+  Ticket   Ticket? @relation(fields: [ticketId], references: [id])
 }
