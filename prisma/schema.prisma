@@ -78,12 +78,35 @@ model Ticket {
   totalValue   Int
   enrollmentId Int        @unique
   Enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  Bed          Bed?
 
   @@map("tickets")
 }
 
 model Hotel {
-  id Int @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
+  name     String
+  imageUrl String
 
+  Room Room[]
   @@map("hotels")
+}
+
+model Room {
+  id      Int    @id @default(autoincrement())
+  number  String
+  hotelId Int
+  Hotel   Hotel  @relation(fields: [hotelId], references: [id])
+  type    Int
+
+  Bed Bed[]
+  @@map("rooms")
+}
+
+model Bed {
+  id       Int    @id @default(autoincrement())
+  roomId   Int
+  room     Room   @relation(fields: [roomId], references: [id])
+  ticketId Int    @unique
+  Ticket   Ticket @relation(fields: [ticketId], references: [id])
 }
