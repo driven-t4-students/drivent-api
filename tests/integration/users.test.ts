@@ -1,4 +1,4 @@
-import app, { init } from '@/app';
+import app, { close, init } from '@/app';
 import { prisma } from '@/config';
 import { duplicatedEmailError } from '@/services/users-service';
 import { faker } from '@faker-js/faker';
@@ -11,6 +11,10 @@ import { cleanDb } from '../helpers';
 beforeAll(async () => {
   await init();
   await cleanDb();
+});
+
+afterAll(async () => {
+  await close();
 });
 
 const server = supertest(app);
@@ -45,17 +49,17 @@ describe('POST /users', () => {
     });
 
     it('should respond with status 400 when current event did not started yet', async () => {
-      const event = await createEvent({ startsAt: dayjs().add(1, 'day').toDate() });
+      await createEvent({ startsAt: dayjs().add(1, 'day').toDate().toString() });
       const body = generateValidBody();
 
-      const response = await server.post('/users').send(body).query({ eventId: event.id });
+      const response = await server.post('/users').send(body);
 
       expect(response.status).toBe(httpStatus.BAD_REQUEST);
     });
 
     describe('when event started', () => {
       beforeAll(async () => {
-        await prisma.event.deleteMany({});
+        await cleanDb();
         await createEvent();
       });
 

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import app, { init } from '@/app';
+import app, { close, init } from '@/app';
 import { exclude } from '@/utils/prisma-utils';
 import { faker } from '@faker-js/faker';
 import httpStatus from 'http-status';
@@ -11,6 +11,10 @@ import { cleanDb, generateValidToken } from '../helpers';
 beforeAll(async () => {
   await init();
   await cleanDb();
+});
+
+afterAll(async () => {
+  await close();
 });
 
 const server = supertest(app);
