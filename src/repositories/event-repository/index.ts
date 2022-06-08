@@ -9,13 +9,11 @@ export interface Event {
 }
 
 async function findFirst() {
-  await redis.connect();
   const title = await redis.get('title');
   const backgroundImageUrl = await redis.get('backgroundImageUrl');
   const logoImageUrl = await redis.get('logoImageUrl');
   const startsAt = await redis.get('startsAt');
   const endsAt = await redis.get('endsAt');
-  await redis.disconnect();
 
   if (title === null) return null;
 

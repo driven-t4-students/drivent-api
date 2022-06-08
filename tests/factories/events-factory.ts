@@ -12,7 +12,6 @@ export async function createEvent(params: Partial<Event> = {}): Promise<Event> {
     endsAt: params.endsAt || dayjs().add(5, 'days').toDate().toString(),
   };
 
-  await redis.connect();
   await redis.set('title', set.title);
   await redis.set('backgroundImageUrl', set.backgroundImageUrl);
   await redis.set('logoImageUrl', set.logoImageUrl);
@@ -24,7 +23,6 @@ export async function createEvent(params: Partial<Event> = {}): Promise<Event> {
   const logoImageUrl = await redis.get('logoImageUrl');
   const startsAt = await redis.get('startsAt');
   const endsAt = await redis.get('endsAt');
-  await redis.disconnect();
 
   const event = { title, backgroundImageUrl, logoImageUrl, startsAt, endsAt };
   return event;
