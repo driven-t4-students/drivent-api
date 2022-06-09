@@ -84,9 +84,8 @@ async function createBeds(rooms: Room[]) {
     const bedQuant = room.type;
 
     for (let i = 0; i < bedQuant; i++) {
-      const bed: { roomId: number; ticketId: null } = {
+      const bed = {
         roomId: room.id,
-        ticketId: null,
       };
       data.push(bed);
     }
