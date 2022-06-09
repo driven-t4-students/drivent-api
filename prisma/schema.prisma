@@ -88,6 +88,7 @@ model Hotel {
   id       Int    @id @default(autoincrement())
   name     String
   imageUrl String
+  
 
   Room Room[]
   @@map("hotels")
