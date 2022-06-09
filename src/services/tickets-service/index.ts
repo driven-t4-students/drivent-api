@@ -29,7 +29,7 @@ async function createBookingTickets(formData: createTicket) {
   if (!enrollment) throw notFoundError();
   const enrollmentId = enrollment.id;
 
-  const data = { type, totalValue, hotel, enrollmentId };
+  const data: Omit<Ticket, 'id'> = { type, totalValue, hotel, enrollmentId, bedId: null };
 
   await ticketRepository.createTicket(data);
 }
