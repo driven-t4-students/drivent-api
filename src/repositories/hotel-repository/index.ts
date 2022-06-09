@@ -8,8 +8,13 @@ async function findAllHotels() {
   });
 }
 
+async function findById(id: number) {
+  return prisma.hotel.findUnique({ where: { id } });
+}
+
 const hotelRepository = {
   findAllHotels,
+  findById,
 };
 
 export default hotelRepository;
