@@ -78,7 +78,8 @@ model Ticket {
   totalValue   Int
   enrollmentId Int        @unique
   Enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
-  Bed          Bed?
+  bedId        Int?       @unique
+  Bed          Bed?       @relation(fields: [bedId], references: [id])
 
   @@map("tickets")
 }
@@ -105,9 +106,8 @@ model Room {
 }
 
 model Bed {
-  id       Int     @id @default(autoincrement())
-  roomId   Int
-  room     Room    @relation(fields: [roomId], references: [id])
-  ticketId Int?    @unique
-  Ticket   Ticket? @relation(fields: [ticketId], references: [id])
+  id     Int     @id @default(autoincrement())
+  roomId Int
+  room   Room    @relation(fields: [roomId], references: [id])
+  Ticket Ticket?
 }

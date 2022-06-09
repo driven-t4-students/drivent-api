@@ -12,6 +12,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await cleanDb();
   await close();
 });
 
