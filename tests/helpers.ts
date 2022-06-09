@@ -6,9 +6,7 @@ import { createSession } from './factories/sessions-factory';
 import { prisma, redis } from '@/config';
 
 export async function cleanDb() {
-  await redis.connect();
   await redis.flushAll();
-  await redis.disconnect();
 
   await prisma.ticket.deleteMany({});
   await prisma.address.deleteMany({});
