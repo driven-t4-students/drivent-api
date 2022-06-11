@@ -16,6 +16,7 @@ model User {
   password   String       @db.VarChar(255)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
+  github     Boolean?
   Session    Session[]
   Enrollment Enrollment[]
 
@@ -88,7 +89,7 @@ model Hotel {
   id       Int    @id @default(autoincrement())
   name     String
   imageUrl String
-  
+
 
   Room Room[]
   @@map("hotels")
