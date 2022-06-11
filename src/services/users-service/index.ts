@@ -5,15 +5,18 @@ import bcrypt from 'bcrypt';
 import eventsService from '../events-service';
 import { duplicatedEmailError } from './errors';
 
-export async function createUser({ email, password }: CreateUserParams): Promise<User> {
+export async function createUser({ email, password, github }: CreateUserParams): Promise<User> {
   await canEnrollOrFail();
 
   await validateUniqueEmailOrFail(email);
-
-  const hashedPassword = await bcrypt.hash(password, 12);
+  let hashedPassword = password;
+  if (!github) {
+    hashedPassword = await bcrypt.hash(password, 12);
+  }
   return userRepository.create({
     email,
     password: hashedPassword,
+    github,
   });
 }
 
@@ -31,7 +34,7 @@ async function canEnrollOrFail() {
   }
 }
 
-export type CreateUserParams = Pick<User, 'email' | 'password'>;
+export type CreateUserParams = Pick<User, 'email' | 'password' | 'github'>;
 
 const userService = {
   createUser,
