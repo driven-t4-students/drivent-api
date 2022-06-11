@@ -11,6 +11,12 @@ async function getByUserId(userId: number): Promise<Ticket> {
 
   return ticket;
 }
+async function getById(id: number): Promise<Ticket> {
+  const ticket = await ticketRepository.findById(id);
+  if (!ticket) throw notFoundError();
+
+  return ticket;
+}
 
 export type ticket = Omit<Ticket, 'id' | 'enrollmentId'>;
 export interface createTicket {
@@ -34,5 +40,6 @@ async function createBookingTickets(formData: createTicket) {
 const ticketsService = {
   getByUserId,
   createBookingTickets,
+  getById,
 };
 export default ticketsService;

@@ -15,9 +15,21 @@ async function createTicket(data: ticket) {
   });
 }
 
+async function findById(id: number) {
+  return prisma.ticket.findFirst({
+    where: { id },
+  });
+}
+
+async function createBooking(ticketId: number, bedId: number) {
+  return prisma.ticket.update({ where: { id: ticketId }, data: { bedId: bedId } });
+}
+
 const ticketRepository = {
   findByEnrollmentId,
   createTicket,
+  findById,
+  createBooking,
 };
 
 export default ticketRepository;
