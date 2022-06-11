@@ -8,8 +8,17 @@ async function getHotels() {
   };
 }
 
+async function getHotelsByBedId(id: number) {
+  const hotels = await hotelsRepository.findHotelByBedId(id);
+
+  return {
+    hotels,
+  };
+}
+
 const hotelsService = {
   getHotels,
+  getHotelsByBedId,
 };
 
 export default hotelsService;
