@@ -24,9 +24,18 @@ async function ValidateHotelId(hotelId: number) {
   if (!hotel) throw HotelNotFound();
 }
 
+async function getHotelsByBedId(id: number) {
+  const hotels = await hotelsRepository.findHotelByBedId(id);
+
+  return {
+    hotels,
+  };
+}
+
 const hotelsService = {
   getHotels,
   getRoomsById,
+  getHotelsByBedId,
 };
 
 export default hotelsService;

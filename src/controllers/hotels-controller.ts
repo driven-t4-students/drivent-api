@@ -13,3 +13,10 @@ export async function getRoomsById(req: Request, res: Response) {
 
   res.send(rooms);
 }
+
+export async function getHotelByBedId(req: Request, res: Response) {
+  const { id } = req.params;
+
+  const data = await hotelService.getHotelsByBedId(parseInt(id));
+  return res.status(200).send(data);
+}
