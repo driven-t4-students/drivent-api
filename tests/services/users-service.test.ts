@@ -28,6 +28,7 @@ describe('createUser', () => {
       await userService.createUser({
         email: existingUser.email,
         password: faker.internet.password(6),
+        github: false,
       });
       fail('should throw duplicatedUserError');
     } catch (error) {
@@ -39,6 +40,7 @@ describe('createUser', () => {
     const user = await userService.createUser({
       email: faker.internet.email(),
       password: faker.internet.password(6),
+      github: false,
     });
 
     const dbUser = await prisma.user.findUnique({
@@ -59,6 +61,7 @@ describe('createUser', () => {
     const user = await userService.createUser({
       email: faker.internet.email(),
       password: rawPassword,
+      github: false,
     });
 
     const dbUser = await prisma.user.findUnique({

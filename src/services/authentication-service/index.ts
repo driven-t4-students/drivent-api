@@ -11,7 +11,9 @@ async function signIn(params: SignInParams): Promise<SignInResult> {
 
   const user = await getUserOrFail(email);
 
-  await validatePasswordOrFail(password, user.password);
+  if (password !== user.password) {
+    await validatePasswordOrFail(password, user.password);
+  }
 
   const token = await createSession(user.id);
 
