@@ -25,8 +25,13 @@ async function findHotelByBedId(id: number) {
   });
 }
 
+async function findById(id: number) {
+  return prisma.hotel.findUnique({ where: { id } });
+}
+
 const hotelRepository = {
   findAllHotels,
+  findById,
   findHotelByBedId,
 };
 
