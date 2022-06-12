@@ -16,6 +16,7 @@ FROM node:16.15
 WORKDIR /usr/src/drivent
 COPY ./package*.json ./
 COPY ./prisma ./prisma
+COPY ./redis ./redis
 RUN npm install --only=production --ignore-scripts
 RUN npm i -g bcrypt
 RUN npm link bcrypt
