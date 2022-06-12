@@ -13,12 +13,12 @@ async function findAllHotels() {
 }
 
 async function findHotelByBedId(id: number) {
-  return prisma.hotel.findUnique({
+  return prisma.bed.findUnique({
     where: { id },
     include: {
-      Room: {
+      room: {
         include: {
-          Bed: true,
+          Hotel: true,
         },
       },
     },
