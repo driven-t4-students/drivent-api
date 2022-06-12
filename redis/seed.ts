@@ -32,7 +32,6 @@ async function main() {
 
   console.log({ data });
   console.log('Done!');
-  process.exit(1);
 }
 
 main().catch((e) => {
