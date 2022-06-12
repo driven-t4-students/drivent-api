@@ -1,15 +1,24 @@
-import { prisma } from '@/config';
+import { prisma, redis } from '@/config';
 
 async function findAllHotels() {
-  return prisma.hotel.findMany({
-    include: {
-      Room: {
-        include: {
-          Bed: true,
+  const hotels = await redis.get('hotels');
+
+  if (!hotels) {
+    const hotels = await prisma.hotel.findMany({
+      include: {
+        Room: {
+          include: {
+            Bed: true,
+          },
         },
       },
-    },
-  });
+    });
+
+    await redis.set('hotels', JSON.stringify(hotels));
+    return hotels;
+  }
+
+  return JSON.parse(hotels);
 }
 
 async function findHotelByBedId(id: number) {
