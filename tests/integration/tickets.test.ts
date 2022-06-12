@@ -53,9 +53,6 @@ describe('GET /tickets', () => {
 
       const response = await server.get('/tickets').set('Authorization', `Bearer ${token}`);
 
-      console.log(expectedTicket);
-      console.log(response.body);
-
       expect(response.status).toBe(httpStatus.OK);
       expect(expectedTicket).toEqual(response.body);
     });
