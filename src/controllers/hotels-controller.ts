@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Response, Request } from 'express';
 import hotelService from '@/services/hotels-service';
 
