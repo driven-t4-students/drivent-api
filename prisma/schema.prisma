@@ -16,8 +16,11 @@ model User {
   password   String       @db.VarChar(255)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
+  github     Boolean?
   Session    Session[]
   Enrollment Enrollment[]
+
+  @@map("users")
 }
 
 model Session {
@@ -27,17 +30,8 @@ model Session {
   token     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
-model Event {
-  id                 Int      @id @default(autoincrement())
-  title              String   @db.VarChar(255)
-  backgroundImageUrl String   @db.VarChar(255)
-  logoImageUrl       String   @db.VarChar(255)
-  startsAt           DateTime
-  endsAt             DateTime
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  @@map("sessions")
 }
 
 model Enrollment {
@@ -52,6 +46,8 @@ model Enrollment {
   Ticket    Ticket?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  @@map("enrollments")
 }
 
 model Address {
@@ -67,6 +63,8 @@ model Address {
   Enrollment    Enrollment @relation(fields: [enrollmentId], references: [id])
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
+
+  @@map("addresses")
 }
 
 enum TicketType {
@@ -81,4 +79,36 @@ model Ticket {
   totalValue   Int
   enrollmentId Int        @unique
   Enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  bedId        Int?       @unique
+  Bed          Bed?       @relation(fields: [bedId], references: [id])
+
+  @@map("tickets")
+}
+
+model Hotel {
+  id       Int    @id @default(autoincrement())
+  name     String
+  imageUrl String
+
+
+  Room Room[]
+  @@map("hotels")
+}
+
+model Room {
+  id      Int    @id @default(autoincrement())
+  number  String
+  hotelId Int
+  Hotel   Hotel  @relation(fields: [hotelId], references: [id])
+  type    Int
+
+  Bed Bed[]
+  @@map("rooms")
+}
+
+model Bed {
+  id     Int     @id @default(autoincrement())
+  roomId Int
+  room   Room    @relation(fields: [roomId], references: [id])
+  Ticket Ticket?
 }

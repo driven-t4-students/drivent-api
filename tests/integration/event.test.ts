@@ -1,4 +1,5 @@
-import app, { init } from '@/app';
+import app, { close, init } from '@/app';
+
 import httpStatus from 'http-status';
 import supertest from 'supertest';
 import { createEvent } from '../factories';
@@ -9,6 +10,10 @@ beforeAll(async () => {
   await cleanDb();
 });
 
+afterAll(async () => {
+  await cleanDb();
+  await close();
+});
 const server = supertest(app);
 
 describe('GET /event', () => {
@@ -25,12 +30,11 @@ describe('GET /event', () => {
 
     expect(response.status).toBe(httpStatus.OK);
     expect(response.body).toEqual({
-      id: event.id,
       title: event.title,
       backgroundImageUrl: event.backgroundImageUrl,
       logoImageUrl: event.logoImageUrl,
-      startsAt: event.startsAt.toISOString(),
-      endsAt: event.endsAt.toISOString(),
+      startsAt: event.startsAt,
+      endsAt: event.endsAt,
     });
   });
 });

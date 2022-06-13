@@ -1,4 +1,4 @@
-import { init } from '@/app';
+import { close, init } from '@/app';
 import { prisma } from '@/config';
 import userService, { duplicatedEmailError } from '@/services/users-service';
 import faker from '@faker-js/faker';
@@ -11,9 +11,14 @@ beforeAll(async () => {
   await cleanDb();
 });
 
+afterAll(async () => {
+  await cleanDb();
+  await close();
+});
+
 describe('createUser', () => {
   beforeAll(async () => {
-    await prisma.event.deleteMany({});
+    await cleanDb();
     await createEvent();
   });
   it('should throw duplicatedUserError if there is a user with given email', async () => {
@@ -23,6 +28,7 @@ describe('createUser', () => {
       await userService.createUser({
         email: existingUser.email,
         password: faker.internet.password(6),
+        github: false,
       });
       fail('should throw duplicatedUserError');
     } catch (error) {
@@ -34,6 +40,7 @@ describe('createUser', () => {
     const user = await userService.createUser({
       email: faker.internet.email(),
       password: faker.internet.password(6),
+      github: false,
     });
 
     const dbUser = await prisma.user.findUnique({
@@ -54,6 +61,7 @@ describe('createUser', () => {
     const user = await userService.createUser({
       email: faker.internet.email(),
       password: rawPassword,
+      github: false,
     });
 
     const dbUser = await prisma.user.findUnique({

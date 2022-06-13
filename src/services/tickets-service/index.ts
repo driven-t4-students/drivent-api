@@ -1,18 +1,21 @@
 import { notFoundError } from '@/errors';
 import ticketRepository from '@/repositories/ticket-repository';
-import { exclude } from '@/utils/prisma-utils';
 import { Ticket, TicketType } from '@prisma/client';
 import enrollmentsService from '../enrollments-service';
 
-async function getByUserId(userId: number): Promise<ticket> {
+async function getByUserId(userId: number): Promise<Ticket> {
   const enrollment = await enrollmentsService.getOneWithAddressByUserId(userId);
 
   const ticket = await ticketRepository.findByEnrollmentId(enrollment.id);
   if (!ticket) throw notFoundError();
 
-  return {
-    ...exclude(ticket, 'id', 'enrollmentId'),
-  };
+  return ticket;
+}
+async function getById(id: number): Promise<Ticket> {
+  const ticket = await ticketRepository.findById(id);
+  if (!ticket) throw notFoundError();
+
+  return ticket;
 }
 
 export type ticket = Omit<Ticket, 'id' | 'enrollmentId'>;
@@ -29,7 +32,7 @@ async function createBookingTickets(formData: createTicket) {
   if (!enrollment) throw notFoundError();
   const enrollmentId = enrollment.id;
 
-  const data = { type, totalValue, hotel, enrollmentId };
+  const data: Omit<Ticket, 'id'> = { type, totalValue, hotel, enrollmentId, bedId: null };
 
   await ticketRepository.createTicket(data);
 }
@@ -37,5 +40,6 @@ async function createBookingTickets(formData: createTicket) {
 const ticketsService = {
   getByUserId,
   createBookingTickets,
+  getById,
 };
 export default ticketsService;
