@@ -33,6 +33,7 @@
     "dev:docker": "npm run dev:compose -- up",
     "dev:docker:down": "npm run dev:compose -- down",
     "dev": "fuser -k 4000/tcp ; NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
+    "dev:start": "npm run dev:load-envs npm run dev",
     "redis": "docker-compose -f docker-compose-redis-only.yml up --remove-orphans",
     "redis:down": "docker-compose -f docker-compose-redis-only.yml down --remove-orphans",
     "dev:redis:seed": "npm run dev:load-envs -- ts-node redis/seed.ts",
