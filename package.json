@@ -33,9 +33,11 @@
     "dev:docker": "npm run dev:compose -- up",
     "dev:docker:down": "npm run dev:compose -- down",
     "dev": "fuser -k 4000/tcp ; NODE_ENV=development nodemon --watch 'src/' --exec 'ts-node -r tsconfig-paths/register ./src/server.ts' -e ts",
+    "dev:start": "npm run dev:load-envs npm run dev",
     "redis": "docker-compose -f docker-compose-redis-only.yml up --remove-orphans",
-    "redis:seed": "npm run dev:load-envs -- ts-node redis/seed.ts",
     "redis:down": "docker-compose -f docker-compose-redis-only.yml down --remove-orphans",
+    "dev:redis:seed": "npm run dev:load-envs -- ts-node redis/seed.ts",
+    "redis:seed": "ts-node redis/seed.ts",
     "ci:build": "docker-compose -f docker-compose.test.yml build",
     "ci:test": "docker-compose -f docker-compose.test.yml run drivent-test bash -c 'npm run test:migration:run && npm test'"
   },
@@ -87,6 +89,7 @@
   "dependencies": {
     "@brazilian-utils/brazilian-utils": "^1.0.0-rc.12",
     "@prisma/client": "^3.14.0",
+    "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dayjs": "^1.11.2",
@@ -94,6 +97,7 @@
     "dotenv-expand": "^8.0.3",
     "express": "^4.18.1",
     "express-async-errors": "^3.1.1",
+    "generate-password": "^1.7.0",
     "http-status": "^1.5.2",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",

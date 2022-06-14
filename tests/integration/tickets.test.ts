@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import app, { close, init } from '@/app';
-import { exclude } from '@/utils/prisma-utils';
 import { faker } from '@faker-js/faker';
 import httpStatus from 'http-status';
 import supertest from 'supertest';
@@ -50,9 +49,7 @@ describe('GET /tickets', () => {
       const enrollment = await createEnrollmentWithAddress(user);
 
       const ticket = await createTicket(enrollment);
-      const expectedTicket = {
-        ...exclude(ticket, 'id', 'enrollmentId'),
-      };
+      const expectedTicket = ticket;
 
       const response = await server.get('/tickets').set('Authorization', `Bearer ${token}`);
 

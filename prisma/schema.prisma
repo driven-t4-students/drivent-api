@@ -16,6 +16,7 @@ model User {
   password   String       @db.VarChar(255)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
+  github     Boolean?
   Session    Session[]
   Enrollment Enrollment[]
 
@@ -72,14 +73,16 @@ enum TicketType {
 }
 
 model Ticket {
-  id           Int        @id @default(autoincrement())
-  type         TicketType
-  hotel        Boolean    @default(false)
-  totalValue   Int
-  enrollmentId Int        @unique
-  Enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
-  bedId        Int?       @unique
-  Bed          Bed?       @relation(fields: [bedId], references: [id])
+  id                     Int                   @id @default(autoincrement())
+  type                   TicketType
+  hotel                  Boolean               @default(false)
+  totalValue             Int
+  enrollmentId           Int                   @unique
+  Enrollment             Enrollment            @relation(fields: [enrollmentId], references: [id])
+  bedId                  Int?                  @unique
+  Bed                    Bed?                  @relation(fields: [bedId], references: [id])
+  activitySubscriptionId Int?                  @unique
+  Activity               ActivitySubscription? @relation(fields: [activitySubscriptionId], references: [id])
 
   @@map("tickets")
 }
@@ -88,7 +91,7 @@ model Hotel {
   id       Int    @id @default(autoincrement())
   name     String
   imageUrl String
-  
+
 
   Room Room[]
   @@map("hotels")
@@ -110,4 +113,31 @@ model Bed {
   roomId Int
   room   Room    @relation(fields: [roomId], references: [id])
   Ticket Ticket?
+}
+
+enum ActivityPlace {
+  main
+  side
+  workshop
+}
+
+model Activity {
+  id                   Int                    @id @default(autoincrement())
+  name                 String
+  date                 String
+  startsAt             String
+  endsAt               String
+  place                ActivityPlace
+  ActivitySubscription ActivitySubscription[]
+
+  @@map("activities")
+}
+
+model ActivitySubscription {
+  id         Int      @id @default(autoincrement())
+  activityId Int
+  Activity   Activity @relation(fields: [activityId], references: [id])
+
+  Ticket Ticket?
+  @@map("activitiesSubscription")
 }

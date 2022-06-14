@@ -11,12 +11,17 @@ services:
         max-size: '10m'
         max-file: '5'
     working_dir: /usr/src/drivent
-    command: bash -c "npx prisma generate && npm run migration:run && npm run start"
+    command: bash -c "npx prisma generate && npx prisma migrate deploy && npm run redis:seed && npm run start"
     restart: always
     environment:
       NODE_ENV: production
       DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
       JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      - drivent-postgres-production
+      - drivent-redis-production
+
   drivent-postgres-production:
     image: postgres:13-alpine
     environment:
@@ -28,6 +33,17 @@ services:
     volumes:
       - /usr/local/drivent-pg/data:/var/lib/postgresql/data
     command: postgres -p ${POSTGRES_PORT}
+
+  drivent-redis-production:
+    container_name: drivent-redis-production
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD} --port ${REDIS_PORT}
+    volumes:
+      - /usr/local/drivent-redis/data:/data
+
   drivent-nginx:
     image: nginx
     ports:
@@ -36,3 +52,5 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - /usr/src/drivent/front-end:/var/www/html
+    depends_on:
+      - drivent-production
