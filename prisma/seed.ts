@@ -105,7 +105,7 @@ async function createBeds(rooms: Room[]) {
 }
 
 async function createActivities() {
-  const dates = ['22/10/2022', '23/10/2022', '24/10/2022'];
+  const dates = ['Sexta, 22/10', 'Sábado, 23/10', 'Domingo, 24/10'];
 
   const data: Omit<Activity, 'id'>[] = [];
 
