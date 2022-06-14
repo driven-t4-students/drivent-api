@@ -113,6 +113,8 @@ model Bed {
   roomId Int
   room   Room    @relation(fields: [roomId], references: [id])
   Ticket Ticket?
+
+  @@map("beds")
 }
 
 enum ActivityPlace {

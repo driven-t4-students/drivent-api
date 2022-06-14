@@ -12,6 +12,17 @@ services:
     volumes:
       - drivent-postgres-data:/var/lib/postgresql/data
     command: postgres -p ${POSTGRES_PORT}
+
+  drivent-redis-development:
+    container_name: drivent-redis-development
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD} --port ${REDIS_PORT}
+    volumes:
+      - /usr/local/drivent-redis/data:/data
+
   drivent-development:
     build:
       context: .
@@ -19,13 +30,14 @@ services:
     container_name: drivent-development
     depends_on:
       - drivent-postgres-development
+      - drivent-redis-development
     logging:
       driver: 'json-file'
       options:
         max-size: '10m'
         max-file: '5'
     working_dir: /usr/src/drivent
-    command: bash -c "npx prisma generate && npm run dev"
+    command: bash -c "npm run dev:load-envs npx prisma generate && npm run dev:load-envs npx prisma migrate deploy && npm run dev:load-envs npm run redis:seed && npm run dev:start"
     environment:
       NODE_ENV: development
     volumes:
@@ -38,5 +50,6 @@ services:
       - ./tsconfig.json:/usr/src/drivent/tsconfig.json
     ports:
       - 4000:4000
+
 volumes:
   drivent-postgres-data:
