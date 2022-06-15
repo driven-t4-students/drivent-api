@@ -23,11 +23,15 @@ async function main() {
   };
 
   await redis.connect();
+
+  await redis.flushAll();
+
   await redis.set('title', data.title);
   await redis.set('backgroundImageUrl', data.backgroundImageUrl);
   await redis.set('logoImageUrl', data.logoImageUrl);
   await redis.set('startsAt', data.startsAt);
   await redis.set('endsAt', data.endsAt);
+
   await redis.disconnect();
 
   console.log({ data });
