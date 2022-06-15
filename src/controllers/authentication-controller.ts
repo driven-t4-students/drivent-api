@@ -38,6 +38,10 @@ export async function githubToken(req: Request, res: Response) {
 
   const email = userResponse.data.email;
 
+  if (!email) {
+    return res.status(404).send('Github email private');
+  }
+
   const existingUser = await userRepository.findByEmail(email);
 
   if (!existingUser) {
