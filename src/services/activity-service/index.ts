@@ -7,8 +7,16 @@ async function getActivities() {
   };
 }
 
-async function subscribyOnActivity(subscriptionId: number, ticketId: number) {
-  const activities = await activityRepository.subscribyOnActivity(subscriptionId, ticketId);
+async function uptadeSubscriptionOnActivity(
+  subscriptionId: number,
+  ticketId: number,
+  cancelSubscription: number | null,
+) {
+  const activities = await activityRepository.uptadeSubscriptionOnActivity(
+    subscriptionId,
+    ticketId,
+    cancelSubscription,
+  );
   return {
     activities,
   };
@@ -16,7 +24,7 @@ async function subscribyOnActivity(subscriptionId: number, ticketId: number) {
 
 const activityService = {
   getActivities,
-  subscribyOnActivity,
+  uptadeSubscriptionOnActivity,
 };
 
 export default activityService;

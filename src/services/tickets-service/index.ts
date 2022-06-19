@@ -37,9 +37,18 @@ async function createBookingTickets(formData: createTicket) {
   await ticketRepository.createTicket(data);
 }
 
+async function getTicketWithSubscription(id: number) {
+  const ticket = await ticketRepository.getTicketWithSubscription(id);
+
+  return {
+    ticket,
+  };
+}
+
 const ticketsService = {
   getByUserId,
   createBookingTickets,
   getById,
+  getTicketWithSubscription,
 };
 export default ticketsService;

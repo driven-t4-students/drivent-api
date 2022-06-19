@@ -6,36 +6,49 @@ async function findManyActivities() {
   });
 }
 
-async function subscribyOnActivity(subscriptionId: number, ticketId: number) {
-  const data = await prisma.activitySubscription.findFirst({
+async function uptadeSubscriptionOnActivity(
+  subscriptionId: number,
+  ticketId: number,
+  cancelSubscription: number | null,
+) {
+  let data = await prisma.activitySubscription.findFirst({
     where: {
       activityId: subscriptionId,
       Ticket: null,
     },
   });
 
-  return await prisma.ticket.findUnique({
+  if (cancelSubscription === null) {
+    data = await prisma.activitySubscription.findFirst({
+      where: {
+        activityId: subscriptionId,
+        ticketId: ticketId,
+      },
+    });
+
+    return await prisma.activitySubscription.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        ticketId: null,
+      },
+    });
+  }
+
+  return await prisma.activitySubscription.update({
     where: {
-      id: 1,
+      id: data.id,
     },
-    include: {
-      activitySubscriptionId: true,
+    data: {
+      ticketId: ticketId,
     },
   });
-
-  // await prisma.activitySubscription.update({
-  //   where: {
-  //     id: data.id,
-  //   },
-  //   data: {
-  //     ticketId: ticketId,
-  //   },
-  // });
 }
 
 const activityRepository = {
   findManyActivities,
-  subscribyOnActivity,
+  uptadeSubscriptionOnActivity,
 };
 
 export default activityRepository;
