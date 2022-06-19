@@ -32,14 +32,23 @@ async function createBookingTickets(formData: createTicket) {
   if (!enrollment) throw notFoundError();
   const enrollmentId = enrollment.id;
 
-  const data: Omit<Ticket, 'id'> = { type, totalValue, hotel, enrollmentId, bedId: null, activitySubscriptionId: null };
+  const data: Omit<Ticket, 'id'> = { type, totalValue, hotel, enrollmentId, bedId: null };
 
   await ticketRepository.createTicket(data);
+}
+
+async function getTicketWithSubscription(id: number) {
+  const ticket = await ticketRepository.getTicketWithSubscription(id);
+
+  return {
+    ticket,
+  };
 }
 
 const ticketsService = {
   getByUserId,
   createBookingTickets,
   getById,
+  getTicketWithSubscription,
 };
 export default ticketsService;

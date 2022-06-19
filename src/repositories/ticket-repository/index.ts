@@ -25,11 +25,23 @@ async function createBooking(ticketId: number, bedId: number) {
   return prisma.ticket.update({ where: { id: ticketId }, data: { bedId: bedId } });
 }
 
+async function getTicketWithSubscription(id: number) {
+  return await prisma.ticket.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      activitySubscriptionId: true,
+    },
+  });
+}
+
 const ticketRepository = {
   findByEnrollmentId,
   createTicket,
   findById,
   createBooking,
+  getTicketWithSubscription,
 };
 
 export default ticketRepository;

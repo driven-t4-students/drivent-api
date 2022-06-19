@@ -15,3 +15,11 @@ export async function createBooking(req: Request, res: Response) {
 
   res.sendStatus(201);
 }
+
+export async function getTicketWithSubscription(req: Request, res: Response) {
+  const { id } = req.params;
+
+  const data = await ticketsService.getTicketWithSubscription(parseInt(id));
+
+  res.status(200).send(data);
+}

@@ -73,16 +73,15 @@ enum TicketType {
 }
 
 model Ticket {
-  id                     Int                   @id @default(autoincrement())
+  id                     Int                    @id @default(autoincrement())
   type                   TicketType
-  hotel                  Boolean               @default(false)
+  hotel                  Boolean                @default(false)
   totalValue             Int
-  enrollmentId           Int                   @unique
-  Enrollment             Enrollment            @relation(fields: [enrollmentId], references: [id])
-  bedId                  Int?                  @unique
-  Bed                    Bed?                  @relation(fields: [bedId], references: [id])
-  activitySubscriptionId Int?                  @unique
-  Activity               ActivitySubscription? @relation(fields: [activitySubscriptionId], references: [id])
+  enrollmentId           Int                    @unique
+  Enrollment             Enrollment             @relation(fields: [enrollmentId], references: [id])
+  bedId                  Int?                   @unique
+  Bed                    Bed?                   @relation(fields: [bedId], references: [id])
+  activitySubscriptionId ActivitySubscription[]
 
   @@map("tickets")
 }
@@ -140,6 +139,7 @@ model ActivitySubscription {
   activityId Int
   Activity   Activity @relation(fields: [activityId], references: [id])
 
-  Ticket Ticket?
+  ticketId Int?
   @@map("activitiesSubscription")
+  Ticket Ticket? @relation(fields: [ticketId], references: [id])
 }
