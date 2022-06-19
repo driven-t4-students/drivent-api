@@ -6,8 +6,17 @@ async function getActivities() {
     activities,
   };
 }
+
+async function subscribyOnActivity(subscriptionId: number, ticketId: number) {
+  const activities = await activityRepository.subscribyOnActivity(subscriptionId, ticketId);
+  return {
+    activities,
+  };
+}
+
 const activityService = {
   getActivities,
+  subscribyOnActivity,
 };
 
 export default activityService;
