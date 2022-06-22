@@ -1,4 +1,4 @@
-import { PrismaClient, Hotel, Room } from '@prisma/client';
+import { PrismaClient, Hotel, Room, Activity } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -6,6 +6,9 @@ async function main() {
   const hotels = await createHotels();
   const rooms = await createRooms(hotels);
   await createBeds(rooms);
+
+  const activities = await createActivities();
+  await createActivitiesSubscriptions(activities);
 }
 
 main()
@@ -21,6 +24,8 @@ async function cleanAccomodations() {
   await prisma.bed.deleteMany({});
   await prisma.room.deleteMany({});
   await prisma.hotel.deleteMany({});
+  await prisma.activitySubscription.deleteMany({});
+  await prisma.activity.deleteMany({});
 }
 
 async function createHotels() {
@@ -97,6 +102,70 @@ async function createBeds(rooms: Room[]) {
 
   console.log({ beds });
   return beds;
+}
+
+async function createActivities() {
+  const dates = ['Sexta, 22/10', 'Sábado, 23/10', 'Domingo, 24/10'];
+
+  const data: Omit<Activity, 'id'>[] = [];
+
+  for (const date of dates) {
+    data.push(
+      {
+        name: 'Minecraft: montando o PC ideal',
+        date,
+        startsAt: '09:00',
+        endsAt: '10:00',
+        place: 'main',
+      },
+      {
+        name: 'O despertar da imaginação',
+        date,
+        startsAt: '10:00',
+        endsAt: '11:00',
+        place: 'main',
+      },
+      {
+        name: 'O processo criativo de um coreógrafo em tempo real',
+        date,
+        startsAt: '09:00',
+        endsAt: '10:30',
+        place: 'side',
+      },
+      {
+        name: 'Seja um pato',
+        date,
+        startsAt: '11:00',
+        endsAt: '12:00',
+        place: 'workshop',
+      },
+    );
+  }
+
+  await prisma.activity.createMany({ data, skipDuplicates: true });
+  const activities = await prisma.activity.findMany({});
+  console.log({ activities });
+
+  return activities;
+}
+
+async function createActivitiesSubscriptions(activities: Activity[]) {
+  const data = [];
+  const subscriptionsQuantity = 30;
+
+  for (const activity of activities) {
+    for (let i = 0; i < subscriptionsQuantity; i++) {
+      const subscription = {
+        activityId: activity.id,
+      };
+      data.push(subscription);
+    }
+  }
+
+  await prisma.activitySubscription.createMany({ data, skipDuplicates: true });
+
+  const subscriptions = await prisma.activitySubscription.findMany({});
+  console.log(subscriptions);
 }
 
 function getRndInteger(min: number, max: number) {
